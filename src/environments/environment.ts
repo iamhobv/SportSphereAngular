@@ -5,7 +5,7 @@
 export const environment = {
   production: false,
   // baseURL: "https://localhost:7212",
-  baseURL: "http://sporstsphere.runasp.net",
+  baseURL: "https://sporstsphere.runasp.net",
   // ayhaga
 };
 
