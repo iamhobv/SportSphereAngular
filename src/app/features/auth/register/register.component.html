@@ -1,0 +1,239 @@
+<section class="gradient-custom h-100">
+    <div class="container py-5 h-100">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+                <div class="card " style="border-radius: 1rem;">
+                    <div class="card-body p-5 text-center">
+
+                        <div class="position-relative text-center mb-5">
+                            <h2 class="fw-bold text-uppercase m-0">Register</h2>
+                            <button *ngIf="step === 2" type="button"
+                                class="btn  text-black position-absolute start-0 top-50 translate-middle-y"
+                                style="background-color: rgb(199, 198, 198);" (click)="previousStep()">
+                                <i class="fa-solid fa-angle-left fw-bold"></i>
+                            </button>
+                        </div>
+
+
+                        <div *ngIf="errorMessage" class="alert alert-danger mt-3">
+                            {{ errorMessage }}
+                        </div>
+                        <div *ngIf="successMessage" class="alert alert-success mt-3">
+                            {{ successMessage }}
+                        </div>
+                        <form [formGroup]="formStep1 " *ngIf="step === 1 " @stepTransition>
+
+                            <!-- Full Name -->
+                            <div class="form-group d-flex flex-column mb-4">
+                                <label for="fullName" class="text-start">Full Name</label>
+                                <input id="fullName" formControlName="fullName" type="text"
+                                    class="form-control form-control-lg" placeholder="Full Name">
+                                <span class="text-danger"
+                                    *ngIf="formStep1.get('fullName')?.touched && formStep1.get('fullName')?.errors?.['required']">
+                                    Full name is required
+                                </span>
+                            </div>
+
+                            <!-- Email -->
+                            <div class="form-group d-flex flex-column mb-4">
+                                <label for="email" class="text-start">Email address</label>
+                                <input id="email" formControlName="email" type="email"
+                                    class="form-control form-control-lg" placeholder="E-mail">
+                                <span class="text-danger"
+                                    *ngIf="formStep1.get('email')?.touched && formStep1.get('email')?.errors?.['required']">
+                                    Email is required
+                                </span>
+                                <span class="text-danger"
+                                    *ngIf="formStep1.get('email')?.touched && formStep1.get('email')?.errors?.['email']">
+                                    Enter a valid email address
+                                </span>
+                            </div>
+
+
+
+                            <!-- Gender -->
+                            <div class="form-group d-flex flex-column mb-4">
+                                <label for="gender" class="text-start">Gender</label>
+                                <select id="gender" formControlName="gender" class="form-control form-control-lg">
+                                    <option [ngValue]="genders.Male">Male</option>
+                                    <option [ngValue]="genders.Female">Female</option>
+                                    <option [ngValue]="genders.Other">Other</option>
+                                </select>
+                                <span class="text-danger"
+                                    *ngIf="formStep1.get('gender')?.touched && formStep1.get('gender')?.errors?.['required']">
+                                    Gender is required
+                                </span>
+                            </div>
+
+                            <!-- Date of Birth -->
+                            <div class="form-group d-flex flex-column mb-4">
+                                <label for="dob" class="text-start">Date of Birth</label>
+                                <input id="dob" formControlName="dateOfBirth" type="date"
+                                    class="form-control form-control-lg">
+                                <span class="text-danger"
+                                    *ngIf="formStep1.get('dateOfBirth')?.touched && formStep1.get('dateOfBirth')?.errors?.['required']">
+                                    Date of Birth is required
+                                </span>
+                            </div>
+
+                            <!-- Phone -->
+                            <div class="form-group d-flex flex-column mb-4">
+                                <label for="phone" class="text-start">Phone Number</label>
+                                <input id="phone" formControlName="phoneNumber" type="text"
+                                    class="form-control form-control-lg" placeholder="Phone Number">
+                                <span class="text-danger"
+                                    *ngIf="formStep1.get('phoneNumber')?.touched && formStep1.get('phoneNumber')?.errors?.['pattern']">
+                                    Phone number must be a valid mobile number format, e.g. +201234567890 or 01234567890
+                                </span>
+                                <span class="text-danger"
+                                    *ngIf="formStep1.get('phoneNumber')?.touched && formStep1.get('phoneNumber')?.errors?.['required']">
+                                    Phone number Date of Birth is required
+                                </span>
+                            </div>
+
+
+
+                            <!-- Password -->
+                            <div class="form-group d-flex flex-column mb-4">
+                                <label for="password" class="text-start">Password</label>
+                                <input id="password" formControlName="password" type="password"
+                                    class="form-control form-control-lg" placeholder="Password">
+                                <span class="text-danger"
+                                    *ngIf="formStep1.get('password')?.touched && formStep1.get('password')?.errors?.['required']">
+                                    Password is required
+                                </span>
+                                <span class="text-danger"
+                                    *ngIf="formStep1.get('password')?.touched && formStep1.get('password')?.errors?.['minlength']">
+                                    Password must be at least 8 characters
+                                </span>
+                            </div>
+
+                            <!-- Confirm Password -->
+                            <div class="form-group d-flex flex-column mb-4">
+                                <label for="confirmPassword" class="text-start">Confirm Password</label>
+                                <input id="confirmPassword" formControlName="confirmPassword" type="password"
+                                    class="form-control form-control-lg" placeholder="Confirm Password">
+
+                                <span class="text-danger"
+                                    *ngIf="formStep1.get('confirmPassword')?.touched && formStep1.get('confirmPassword')?.errors?.['required']">
+                                    Confirm Password is required
+                                </span>
+
+                                <!-- ✅ Show mismatch error -->
+                                <span class="text-danger"
+                                    *ngIf="formStep1.errors?.['mismatch'] && formStep1.get('confirmPassword')?.touched">
+                                    Passwords do not match
+                                </span>
+                            </div>
+
+                            <button type="button" (click)="nextStep()" class="btn btn-primary">Next</button>
+                            <!-- <app-pri-button text="Register" size="lg" type="submit"></app-pri-button> -->
+                        </form>
+
+                        <form [formGroup]="formStep2" *ngIf="step === 2" (ngSubmit)="submitFinal()" @stepTransition>
+
+
+                            <!--    public string? Bio { get; set; }
+   public string? Country { get; set; }
+   public string? City { get; set; }
+ -->
+
+                            <div class="form-group d-flex flex-column mb-4">
+                                <label for="bio" class="text-start">Bio</label>
+                                <input id="bio" formControlName="bio" type="text" class="form-control form-control-lg">
+                            </div>
+                            <div class="form-group d-flex flex-column mb-4">
+                                <label for="country" class="text-start">Country</label>
+                                <!-- <input id="country" formControlName="country" type="text"
+                                    class="form-control form-control-lg"> -->
+                                <select formControlName="country" id="country" class="form-control form-control-lg">
+                                    <option value="" disabled>Select a country</option>
+                                    <option *ngFor="let country of countries" [ngValue]="country">
+                                        {{ country.name }}
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="form-group d-flex flex-column mb-4">
+                                <label for="city" class="text-start">City</label>
+                                <!-- <input id="city" formControlName="city" type="text"
+                                    class="form-control form-control-lg"> -->
+                                <select formControlName="city" id="city" class="form-control form-control-lg">
+                                    <option value="" disabled selected>Select a city</option>
+                                    <option *ngFor="let city of cities" [ngValue]="city">
+                                        {{ city.name }}
+                                    </option>
+                                </select>
+                            </div>
+
+
+
+
+
+
+
+                            <!-- Role -->
+                            <div class="form-group d-flex flex-column mb-4">
+                                <label for="role" class="text-start">Role</label>
+                                <select id="role" formControlName="role" class="form-control form-control-lg">
+                                    <option [value]="roles.Athlete">Athlete</option>
+                                    <option [value]="roles.Coach">Coach</option>
+                                    <option [value]="roles.Fan">Fan</option>
+                                    <option [value]="roles.Scout">Scout</option>
+                                </select>
+
+                                <span class="text-danger"
+                                    *ngIf="formStep2.get('role')?.touched && formStep2.get('role')?.errors?.['required']">
+                                    Role is required
+                                </span>
+                            </div>
+                            <!-- Athlete-only fields -->
+                            <div *ngIf="isAthlete()">
+
+                                <div class="form-group d-flex flex-column mb-4">
+                                    <label for="sport" class="text-start">Sport</label>
+                                    <input id="sport" formControlName="sport" type="text"
+                                        class="form-control form-control-lg">
+                                </div>
+
+                                <div class="form-group d-flex flex-column mb-4">
+                                    <label for="position" class="text-start">Position</label>
+                                    <input id="position" formControlName="position" type="text"
+                                        class="form-control form-control-lg">
+                                </div>
+
+                                <div class="form-group d-flex flex-column mb-4">
+                                    <label for="heightCm" class="text-start">Height (cm)</label>
+                                    <input id="heightCm" formControlName="heightCm" type="number"
+                                        class="form-control form-control-lg">
+                                </div>
+
+                                <div class="form-group d-flex flex-column mb-4">
+                                    <label for="weightKg" class="text-start">Weight (kg)</label>
+                                    <input id="weightKg" formControlName="weightKg" type="number"
+                                        class="form-control form-control-lg">
+                                </div>
+                            </div>
+                            <!-- File Upload -->
+                            <div class="form-group d-flex flex-column mb-4">
+                                <label for="file" class="text-start">Profile Picture</label>
+                                <input id="file" type="file" class="form-control form-control-lg"
+                                    (change)="onFileSelected($event)">
+                            </div>
+
+                            <button (click)="test()">asd</button>
+
+                            <app-pri-button text="Register" size="lg" type="submit"></app-pri-button>
+
+                        </form>
+                        <div class="mt-4">
+                            <p class="mb-0">Already have an account?
+                                <a routerLink="../login" class="text-black fw-bold">Login</a>
+                            </p>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

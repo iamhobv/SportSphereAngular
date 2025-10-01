@@ -1,0 +1,286 @@
+<div class="container mt-5">
+    <div class="row g-4">
+
+        <div class="col-md-3">
+
+            <app-first-column-in-home-profile sport="{{ProfileData.sport}}" userName="{{ProfileData.fullName}}"
+                bio="{{ProfileData.bio}}" resident="{{ProfileData.city}},{{ProfileData.country}}"
+                role="{{ProfileData.role}}" userId="{{ProfileData.userId}}"
+                image="{{ProfileData.profileImageURL}}"></app-first-column-in-home-profile>
+        </div>
+        <!-- Column 2 -->
+        <div class="col-md-6">
+            <div class=" card mb-3 shadow-sm" style="max-width: 600px; margin: auto;">
+                <div class="card-body" *ngIf="navIndex === 1 ">
+                    <h3 class="p-1 border-bottom border-2 mb-5">Edit Profile</h3>
+                    <form [formGroup]="formStep1 ">
+
+                        <div class="form-group d-flex flex-column mb-4">
+                            <label for="fullName" class="text-start">Full Name</label>
+                            <input id="fullName" formControlName="fullName" type="text"
+                                class="form-control form-control-lg" placeholder="Full Name">
+                            <span class="text-danger"
+                                *ngIf="formStep1.get('fullName')?.touched && formStep1.get('fullName')?.errors?.['required']">
+                                Full name is required
+                            </span>
+                        </div>
+                        <div class="form-group d-flex flex-column mb-4">
+                            <label for="dob" class="text-start">Date of Birth</label>
+                            <input id="dob" formControlName="dateOfBirth" type="date"
+                                class="form-control form-control-lg">
+                            <span class="text-danger"
+                                *ngIf="formStep1.get('dateOfBirth')?.touched && formStep1.get('dateOfBirth')?.errors?.['required']">
+                                Date of Birth is required
+                            </span>
+                        </div>
+                        <div class="form-group d-flex flex-column mb-4">
+                            <label for="gender" class="text-start">Gender</label>
+                            <select id="gender" formControlName="gender" class="form-control form-control-lg">
+                                <option [ngValue]="genders.Male">Male</option>
+                                <option [ngValue]="genders.Female">Female</option>
+                                <option [ngValue]="genders.Other">Other</option>
+                            </select>
+                            <span class="text-danger"
+                                *ngIf="formStep1.get('gender')?.touched && formStep1.get('gender')?.errors?.['required']">
+                                Gender is required
+                            </span>
+                        </div>
+                        <div class="form-group d-flex flex-column mb-4">
+                            <label for="phone" class="text-start">Phone Number</label>
+                            <input id="phone" formControlName="phoneNumber" type="text"
+                                class="form-control form-control-lg" placeholder="Phone Number">
+                            <span class="text-danger"
+                                *ngIf="formStep1.get('phoneNumber')?.touched && formStep1.get('phoneNumber')?.errors?.['pattern']">
+                                Phone number must be a valid mobile number format, e.g. +201234567890 or 01234567890
+                            </span>
+                            <span class="text-danger"
+                                *ngIf="formStep1.get('phoneNumber')?.touched && formStep1.get('phoneNumber')?.errors?.['required']">
+                                Phone number Date of Birth is required
+                            </span>
+                        </div>
+                        <div class="form-group d-flex flex-column mb-4">
+                            <label for="bio" class="text-start">Bio</label>
+                            <input id="bio" formControlName="bio" type="text" class="form-control form-control-lg">
+                        </div>
+                        <div class="form-group d-flex flex-column mb-4">
+                            <label for="country" class="text-start">Country</label>
+                            <!-- <input id="country" formControlName="country" type="text"
+                                class="form-control form-control-lg"> -->
+                            <select formControlName="country" id="country" class="form-control form-control-lg">
+                                <option value="" disabled>Select a country</option>
+                                <option *ngFor="let country of countries" [ngValue]="country">
+                                    {{ country.name }}
+                                </option>
+                            </select>
+                        </div>
+                        <div class="form-group d-flex flex-column mb-4">
+                            <label for="city" class="text-start">City</label>
+                            <!-- <input id="city" formControlName="city" type="text" class="form-control form-control-lg"> -->
+                            <select formControlName="city" id="city" class="form-control form-control-lg">
+                                <option value="" disabled selected>Select a city</option>
+                                <option *ngFor="let city of cities" [ngValue]="city">
+                                    {{ city.name }}
+                                </option>
+                            </select>
+                        </div>
+                        <div *ngIf="athlete">
+
+                            <div class="form-group d-flex flex-column mb-4">
+                                <label for="sport" class="text-start">Sport</label>
+                                <input id="sport" formControlName="sport" type="text"
+                                    class="form-control form-control-lg">
+                            </div>
+
+                            <div class="form-group d-flex flex-column mb-4">
+                                <label for="position" class="text-start">Position</label>
+                                <input id="position" formControlName="position" type="text"
+                                    class="form-control form-control-lg">
+                            </div>
+
+                            <div class="form-group d-flex flex-column mb-4">
+                                <label for="heightCm" class="text-start">Height (cm)</label>
+                                <input id="heightCm" formControlName="heightCm" type="number"
+                                    class="form-control form-control-lg">
+                            </div>
+
+                            <div class="form-group d-flex flex-column mb-4">
+                                <label for="weightKg" class="text-start">Weight (kg)</label>
+                                <input id="weightKg" formControlName="weightKg" type="number"
+                                    class="form-control form-control-lg">
+                            </div>
+                        </div>
+                        <div class="form-group d-flex flex-column mb-4">
+                            <label for="file" class="text-start">Profile Picture</label>
+                            <input id="file" type="file" class="form-control form-control-lg"
+                                (change)="onFileSelected($event)">
+                        </div>
+
+
+                        <button type="button" (click)="submitEditProfile()" class="btn btn-primary">Submit</button>
+                    </form>
+                </div>
+                <div class="card-body" *ngIf="navIndex === 2 ">
+                    <h3 class="p-1 border-bottom border-2 mb-5">Blocked user</h3>
+                    <ng-container *ngIf="blocking && blocking.length > 0; else noBlocked">
+                        <div *ngFor="let user of blocking; trackBy: trackById"
+                            class="d-flex align-items-center  p-2 mb-2 pointerClick">
+                            <img [src]="baseURL + user.profilePictureUrl" [alt]="user.fullName"
+                                class="rounded-circle me-3" height="50px" width="50px"
+                                (click)="goToProfile(user.userID)">
+
+                            <div class="flex-grow-1" (click)="goToProfile(user.userID)">
+                                <h6 class="mb-0">{{ user.fullName }}</h6>
+                                <div class="text-muted" style="
+          display: -webkit-box;
+          -webkit-line-clamp: 1; 
+          -webkit-box-orient: vertical;
+          overflow: hidden;
+          max-width: 100%;
+        ">
+                                    {{ user.bio }}
+                                </div>
+                            </div>
+                            <button (click)="unBlock(user.userID)" class="btn btn-danger">unblock</button>
+                        </div>
+
+                    </ng-container>
+
+                    <ng-template #noBlocked>
+                        <div class="text-center text-muted p-3">
+                            You are not block anyone yet.
+                        </div>
+                    </ng-template>
+
+
+                </div>
+                <div class="card-body" *ngIf="navIndex === 3 ">
+                    <h3 class="p-1 border-bottom border-2 mb-5">Change password</h3>
+                    <div *ngIf="errorMessage" class="alert alert-danger mt-3">
+                        {{ errorMessage }}
+                    </div>
+                    <div *ngIf="successMessage" class="alert alert-success mt-3">
+                        {{ successMessage }}
+                    </div>
+                    <form [formGroup]="formChangePassword ">
+
+                        <div class="form-group d-flex flex-column mb-4">
+                            <label for="oldPassword" class="text-start"> Old Password</label>
+                            <input id="oldPassword" formControlName="oldPassword" type="Password"
+                                class="form-control form-control-lg" placeholder="Old Password">
+                            <span class="text-danger"
+                                *ngIf="formChangePassword.get('oldPassword')?.touched && formChangePassword.get('oldPassword')?.errors?.['required']">
+                                Old Password is required
+                            </span>
+                            <span class="text-danger"
+                                *ngIf="formChangePassword.get('oldPassword')?.touched && formChangePassword.get('oldPassword')?.errors?.['minlength']">
+                                Old Password must be at least 8 characters
+                            </span>
+                        </div>
+                        <div class="form-group d-flex flex-column mb-4">
+                            <label for="newPassword" class="text-start">New Password</label>
+                            <input id="newPassword" formControlName="newPassword" type="password"
+                                class="form-control form-control-lg" placeholder="New Password">
+                            <span class="text-danger"
+                                *ngIf="formChangePassword.get('newPassword')?.touched && formChangePassword.get('newPassword')?.errors?.['required']">
+                                Password is required
+                            </span>
+                            <span class="text-danger"
+                                *ngIf="formChangePassword.get('newPassword')?.touched && formChangePassword.get('newPassword')?.errors?.['minlength']">
+                                Password must be at least 8 characters
+                            </span>
+                        </div>
+
+                        <!-- Confirm Password -->
+                        <div class="form-group d-flex flex-column mb-4">
+                            <label for="confirmPassword" class="text-start">Confirm Password</label>
+                            <input id="confirmPassword" formControlName="confirmPassword" type="password"
+                                class="form-control form-control-lg" placeholder="Confirm Password">
+
+                            <span class="text-danger"
+                                *ngIf="formChangePassword.get('confirmPassword')?.touched && formChangePassword.get('confirmPassword')?.errors?.['required']">
+                                Confirm Password is required
+                            </span>
+
+                            <!-- ✅ Show mismatch error -->
+                            <span class="text-danger"
+                                *ngIf="formChangePassword.errors?.['mismatch'] && formChangePassword.get('confirmPassword')?.touched">
+                                Passwords do not match
+                            </span>
+                        </div>
+
+
+                        <button type="button" (click)="submitChangePassword()" class="btn btn-primary">Submit</button>
+                    </form>
+
+                </div>
+                <div class="card-body" *ngIf="navIndex === 4 ">
+                    <h3 class="p-1 border-bottom border-2 mb-5">Deactivate my account</h3>
+                    <div *ngIf="errorMessage" class="alert alert-danger mt-3">
+                        {{ errorMessage }}
+                    </div>
+                    <div *ngIf="successMessage" class="alert alert-success mt-3">
+                        {{ successMessage }}
+                    </div>
+                    <h2 class="text-danger mb-5">Are you sure you want to deactivate your account?</h2>
+                    <!-- Are you sure you want to deactivate your account? -->
+                    <div class="d-flex flex-row align-items-center justify-content-center gap-5">
+                        <button class="btn btn-danger btn-sm" (click)="Yes()">Yes</button>
+                        <button class="btn btn-success btn-lg" (click)="No()">No</button>
+                    </div>
+
+                </div>
+                <div class="card-body" *ngIf="navIndex === 5 ">
+                    <h3 class="p-1 border-bottom border-2 mb-5">Switch appearance</h3>
+
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="radioDefault" id="radioDefault1"
+                            (change)="light()" checked>
+                        <label class="form-check-label" for="radioDefault1">
+                            Light mode
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="radioDefault" id="radioDefault2"
+                            (change)="dark()" disabled>
+                        <label class="form-check-label" for="radioDefault2">
+                            Dark mode
+                        </label>
+                    </div>
+                    <!-- <button (click)="toggleTheme()">Toggle Theme</button> -->
+                </div>
+
+
+            </div>
+
+        </div>
+
+        <!-- Column 3 -->
+        <div class="col-md-3">
+            <div class="card shadow-0">
+                <div class="card px-0 pt-0 shadow-sm">
+                    <div class="card-body">
+                        <h4> Settings </h4>
+                        <h5 class=" pointerClick py-2" (click)="settings(1)"
+                            [ngClass]="navIndex==1 ? 'text-black' : 'text-secondary'">
+                            Edit my Profile</h5>
+                        <h5 class=" pointerClick py-2" (click)="settings(2)"
+                            [ngClass]="navIndex==2 ? 'text-black' : 'text-secondary'">Blocked users</h5>
+                        <h5 class=" pointerClick py-2" (click)="settings(3)"
+                            [ngClass]="navIndex==3 ? 'text-black' : 'text-secondary'">Change password</h5>
+                        <h5 class=" pointerClick py-2" (click)="settings(4)"
+                            [ngClass]="navIndex==4 ? 'text-black' : 'text-secondary'">Deactivate my account</h5>
+                        <h5 class=" pointerClick py-2" (click)="settings(5)"
+                            [ngClass]="navIndex==5 ? 'text-black' : 'text-secondary'">Switch appearance</h5>
+                        <h5 class=" pointerClick py-2 text-secondary" (click)="logout()">Logout</h5>
+                    </div>
+
+                </div>
+
+
+
+
+            </div>
+
+        </div>
+    </div>
+</div>

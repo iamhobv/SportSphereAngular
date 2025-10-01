@@ -1,0 +1,38 @@
+<div class="card shadow-0">
+    <div class="card-body px-0 pb-0">
+        <app-home-profile-card sport="{{sport}}" userName="{{userName}}" bio="{{bio}}" resident="{{resident}}"
+            role="{{role}}" userId="{{userId}}" image="{{image}}"></app-home-profile-card>
+    </div>
+    <div class="card-body px-0">
+        <div class="card text-start shadow-sm py-4 gap-3">
+
+            <h4 (click)="goHome()" class="py-2 m-0 px-4 pointerClick"><i class="fa-regular fa-home me-3"></i>Home</h4>
+            <h4 class="py-2 m-0 px-4 pointerClick"><i class="fa-regular fa-bell me-3"></i>Notifications</h4>
+            <h4 class="py-2 m-0 px-4 pointerClick"><i class="fa-regular fa-envelope me-3"></i>Messages</h4>
+            <h4 class="py-2 m-0 px-4 pointerClick"><i class="fa-regular fa-bookmark me-3"></i>Bookmarks</h4>
+            <!-- <h4 class="py-2 m-0 px-4 pointerClick"><i class="fa-solid fa-gear me-3"></i>Settings</h4> -->
+
+            <div class="btn-group shadow-0 py-2 m-0 px-4 pointerClick">
+                <button type="button" class="  bg-transparent h4 border-0 p-0 m-0  " data-bs-toggle="dropdown"
+                    data-bs-display="static" aria-expanded="false">
+                    <i class="fa-solid fa-gear me-3"></i>Settings </button>
+
+                <ul class="dropdown-menu dropdown-menu-end dropdown-menu-lg-start border-1">
+                    <!-- <li><button (click)="settings(0)" class="dropdown-item" type="button">Settings</button></li> -->
+                    <li><button (click)="settings(1)" class="dropdown-item" type="button">Edit my Profile</button></li>
+                    <li><button (click)="settings(2)" class="dropdown-item" type="button">Blocked users</button>
+                    </li>
+                    <li><button (click)="settings(3)" class="dropdown-item" type="button">Change password</button>
+                    </li>
+                    <li><button (click)="settings(4)" class="dropdown-item" type="button">Deactivate my account</button>
+                    </li>
+                    <li><button (click)="settings(5)" class="dropdown-item" type="button">Switch appearance</button>
+                    </li>
+                    <li><button (click)="logout()" class="dropdown-item" type="button">Logout</button></li>
+                </ul>
+
+            </div>
+
+        </div>
+    </div>
+</div>

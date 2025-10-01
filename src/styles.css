@@ -1,1 +1,29 @@
-/* You can add global styles to this file, and also import other style files */
+@import "~@fortawesome/fontawesome-free/css/all.min.css";
+
+.position-relative .fa {
+  cursor: pointer;
+  color: #666;
+  font-size: 1.2rem;
+}
+
+.pointerClick{
+    cursor: pointer !important;
+}
+
+
+
+
+/* Dark mode */
+.dark-mode {
+  background: #1c1c1c;
+  color: #ffffff;
+}
+.light-mode{
+  background: #f0f0f0;
+  color: #000000;
+}
+
+html,body,.app-root {
+  transition: background 0.3s, color 0.3s;
+}
+

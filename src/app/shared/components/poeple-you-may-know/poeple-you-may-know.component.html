@@ -1,0 +1,31 @@
+<div class="card shadow-sm p-3 mb-4" style="max-width: 600px; margin: auto;">
+    <h3>People you may like</h3>
+
+    <ng-container *ngIf="following && following.length > 0; else noFollowing">
+        <div *ngFor="let user of following; trackBy: trackById" class="d-flex align-items-center  p-2 mb-2 pointerClick"
+            [ngClass]="isLast?'border-bottom':''" (click)="goToProfile(user.userID)">
+            <img [src]="baseURL + user.profilePictureUrl" [alt]="user.fullName" class="rounded-circle me-2"
+                height="30px" width="30px">
+
+            <div class="flex-grow-1">
+                <h6 class="mb-0">{{ user.fullName }}</h6>
+                <div class="text-muted" style="
+          display: -webkit-box;
+          -webkit-line-clamp: 1; 
+          -webkit-box-orient: vertical;
+          overflow: hidden;
+          max-width: 100%;
+        ">
+                    {{ user.bio }}
+                </div>
+            </div>
+        </div>
+
+    </ng-container>
+
+    <ng-template #noFollowing>
+        <div class="text-center text-muted p-3">
+            You are not following anyone yet.
+        </div>
+    </ng-template>
+</div>

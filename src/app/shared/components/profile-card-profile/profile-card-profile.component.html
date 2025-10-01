@@ -1,0 +1,51 @@
+<div class="container p-4">
+    <div class="d-flex flex-row gap-4">
+        <img *ngIf="ProfileData.profileImageURL!=null" [src]="baseURL + ProfileData.profileImageURL"
+            alt="Profile Picture" class="profile-pic mb-3  "
+            (click)="openImageModal(baseURL + ProfileData.profileImageURL)">
+        <div class="w-100 ">
+            <div class="d-flex flex-row justify-content-between align-items-center">
+
+                <div>
+                    <div class="username">{{ProfileData.fullName}}</div>
+                    <div class="bio ">{{ProfileData.bio}} </div>
+                </div>
+                <div>
+                    <div class="d-flex justify-content-center flex-column gap-2 ">
+                        <button (click)="settings(1)" *ngIf="myProfile" class="btn btn-custom btn-sm">Edit
+                            Profile</button>
+                        <button (click)="Unfollow(ProfileData.userId)" *ngIf="!myProfile && ProfileData.isIFollow"
+                            class="btn btn-unfollow btn-sm">Unfollow</button>
+                        <button (click)="follow(ProfileData.userId)" *ngIf="!myProfile && !ProfileData.isIFollow"
+                            class="btn btn-follow btn-sm">Follow</button>
+                        <button (click)="unBlock(ProfileData.userId)" *ngIf="!myProfile && ProfileData.isIBlock"
+                            class="btn btn-unfollow btn-sm">Unblock</button>
+                        <button (click)="block(ProfileData.userId)" *ngIf="!myProfile && !ProfileData.isIBlock"
+                            class="btn btn-follow btn-sm">Block</button>
+                    </div>
+                </div>
+            </div>
+
+            <h6>{{ProfileData.role}}</h6>
+
+            <h6 *ngIf="ProfileData.sport!=null">{{ProfileData.sport}}</h6>
+            <div class="stats my-2">
+                <span>{{stats.noOfPosts}} posts</span>
+                <span>{{stats.noOfFollowers}} followers</span>
+                <span>{{stats.noOfFollowing}} following</span>
+            </div>
+
+
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="imageModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content bg-transparent border-0">
+            <div class="modal-body text-center p-2 bg-white">
+                <img [src]="selectedImage" class="img-fluid rounded " alt="Large Image">
+            </div>
+        </div>
+    </div>
+</div>

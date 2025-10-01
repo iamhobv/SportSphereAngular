@@ -1,0 +1,495 @@
+<div *ngIf="!isProfilePage" class="text-center text-muted  top-button-grid border-0"
+    style="max-width: 600px; margin: auto;">
+    <p class="button-item shadow-sm p-3 pointer"
+        [ngClass]="PostPage==1 ? 'post-page-btn-class-active' : 'text-secondary'" (click)="selectPostPage(1)">For you
+    </p>
+    <p class="button-item shadow-sm p-3 pointer"
+        [ngClass]="PostPage==2 ? 'post-page-btn-class-active' : 'text-secondary'" (click)="selectPostPage(2)">Following
+    </p>
+
+</div>
+
+
+<div *ngIf="PostPage==2||PostPage==1 ">
+    <ng-container *ngIf="(PostPage==1 ? postsForYou : postsFollowing)!.length > 0; else noForYouPosts ">
+        <div *ngFor="let post of (PostPage==1 ? postsForYou : postsFollowing);  trackBy: trackById"
+            class="card shadow-sm mb-4" style="max-width: 600px; margin: auto;">
+
+            <div class="card-body d-flex align-items-center justify-content-between">
+                <div class="d-flex align-items-center">
+
+                    <img [src]="baseURL + post.profilePictureUrl" [alt]="post.authorName"
+                        class="rounded-circle me-3 object-fit-cover" width="50" height="50"
+                        (click)="gotoProfile(post.userId)">
+                    <div>
+                        <div class="d-flex ">
+
+                            <h6 class="mb-0">{{post.authorName}}</h6>
+                            <small class=" text-muted fw-lighter " style="font-size: 0.81em;"><span
+                                    class="mx-1">.</span>{{
+                                getTimeAgo(post.createdAt) }}</small>
+                        </div>
+                        <small class="text-muted">{{post.bio}} </small>
+                    </div>
+                </div>
+
+
+                <div class="btn-group shadow-0">
+                    <button type="button" class=" btn bg-transparent shadow-0 p-2 fs-6 " data-bs-toggle="dropdown"
+                        data-bs-display="static" aria-expanded="false">
+                        <i class="fa-solid fa-ellipsis-vertical"></i> </button>
+
+                    <ul *ngIf="isProfilePage" class="dropdown-menu dropdown-menu-end dropdown-menu-lg-start border-1">
+                        <li *ngIf="isMyProfile"><button class="dropdown-item" type="button"><i
+                                    class="fa-solid fa-trash"></i> Delete
+                                post</button></li>
+                        <li *ngIf="!isMyProfile"><button (click)="blockUser(post.userId)" class="dropdown-item"
+                                type="button"><i class="fa-solid fa-user-slash"></i> Block
+                                user</button></li>
+                        <li *ngIf="!isMyProfile"><button class="dropdown-item" type="button"><i
+                                    class="fa-solid fa-poo"></i> Report
+                                Post</button></li>
+                    </ul>
+                    <ul *ngIf="!isProfilePage" class="dropdown-menu dropdown-menu-end dropdown-menu-lg-start border-1">
+                        <li *ngIf="PostPage==1"><button (click)="follow(post.userId)" class="dropdown-item"
+                                type="button"><i class="fa-solid fa-user-plus"></i> Follow</button></li>
+                        <li *ngIf="PostPage==2"><button (click)="Unfollow(post.userId)" class="dropdown-item"
+                                type="button"><i class="fa-solid fa-user-minus"></i> Unfollow</button></li>
+                        <li><button (click)="blockUser(post.userId)" class="dropdown-item" type="button"><i
+                                    class="fa-solid fa-user-slash"></i> Block user</button></li>
+                        <li><button class="dropdown-item" type="button"><i class="fa-solid fa-poo"></i> Report
+                                Post</button></li>
+                    </ul>
+                </div>
+
+
+                <!-- <button class="btn bg-transparent shadow-0 p-2 fs-6"></button> -->
+
+            </div>
+
+            <div class="card-body pt-0">
+                <p class="mb-2"><span
+                        class="text-secondary border-2 border-danger px-3 border-start border-secondary">{{post.caption}}</span><br>
+                    {{post.content}}</p>
+
+
+                <div class="media-grid">
+                    <ng-container
+                        *ngFor="let media of post.mediaFiles | slice:0:4; let i = index; trackBy: trackByMedia">
+
+                        <div class="media-wrapper" *ngIf="media.contentType.includes('image')">
+                            <img [src]="baseURL + media.url" [alt]="media.fileName" class="media-item"
+                                (click)="openPost(post)" data-bs-toggle="modal" data-bs-target="#postModal">
+
+                            <div *ngIf="i === 3 && post.mediaFiles.length > 4" class="overlay" (click)="openPost(post)"
+                                data-bs-toggle="modal" data-bs-target="#postModal">
+                                +{{ post.mediaFiles.length - 4 }}
+                            </div>
+                        </div>
+
+
+                        <div class="media-wrapper" *ngIf="media.contentType.includes('video')">
+                            <video [src]="baseURL + media.url" class="media-item" controls (click)="openPost(post)"
+                                data-bs-toggle="modal" data-bs-target="#postModal">
+                            </video>
+                            <div *ngIf="i === 3 && post.mediaFiles.length > 4" class="overlay" (click)="openPost(post)"
+                                data-bs-toggle="modal" data-bs-target="#postModal">
+                                +{{ post.mediaFiles.length - 4 }}
+                            </div>
+                        </div>
+
+                    </ng-container>
+                </div>
+
+            </div>
+
+            <div class="card-footer bg-white d-flex justify-content-between text-muted">
+                <div>{{post.likesCount}}
+                    <button class=" p-0 m-0 border-0 bg-transparent text-muted" (click)="toggleLike(post)">
+
+                        <i class="fa-solid fa-heart" [ngClass]="post.isILiked ? 'text-danger' : 'text-secondary'"></i>
+                    </button>
+                </div>
+                <div>{{post.commentsCount}}
+                    <button (click)="openPost(post)" data-bs-toggle="modal" data-bs-target="#postModal"
+                        class="p-0 m-0 border-0 bg-transparent text-muted">
+
+                        <i class="fa-solid fa-comment-dots text-secondary"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="card-body py-0 d-flex align-items-center mb-3">
+                <div class="position-relative ">
+                    <img *ngIf="image" [src]="baseURL + post.profilePictureUrl" alt="Profile"
+                        class="rounded-circle object-fit-cover" width="40" height="40">
+
+                </div>
+                <input type="text" class="form-control rounded-pill mx-3" style="height: 40px;"
+                    placeholder="Add comment" id="CommentFromPost{{post.postId}}">
+                <div class="position-relative ">
+                    <button type="button" class="btn btn-default btn-circle shadow-0 border"
+                        (click)="addCommentFromOut(post.postId)"><i
+                            class="fa-solid fa-paper-plane rotate45"></i></button>
+
+                </div>
+            </div>
+            <div class="toast-message" *ngIf="toastMessage">
+                {{ toastMessage }}
+            </div>
+
+        </div>
+
+        <div class="d-flex justify-content-center ">
+
+            <button class="btn rounded-pill shadow-0 border shadow-1-soft mb-3" (click)="loadMorePosts()"
+                *ngIf="FollowinghasMorePosts">load more
+                posts</button>
+        </div>
+    </ng-container>
+</div>
+
+<!-- <div *ngIf="PostPage==1">
+    <ng-container *ngIf="postsForYou && postsForYou.length > 0; else noForYouPosts">
+        <div *ngFor="let post of postsForYou; trackBy: trackById" class="card shadow-sm mb-4"
+            style="max-width: 600px; margin: auto;">
+            <div class="card-body d-flex align-items-center">
+                <img [src]="baseURL + post.profilePictureUrl" [alt]="post.authorName"
+                    class="rounded-circle me-3 object-fit-cover" width="50" height="50">
+                <div>
+                    <div class="d-flex ">
+
+                        <h6 class="mb-0">{{post.authorName}}</h6>
+                        <small class=" text-muted fw-lighter " style="font-size: 0.81em;"><span class="mx-1">.</span>{{
+                            getTimeAgo(post.createdAt) }}</small>
+                    </div>
+                    <small class="text-muted">{{post.bio}} </small>
+                </div>
+            </div>
+
+            <div class="card-body pt-0">
+                <p class="mb-2"><span
+                        class="text-secondary border-2 border-danger px-3 border-start border-secondary">{{post.caption}}</span><br>
+                    {{post.content}}</p>
+
+
+                <div class="media-grid">
+                    <ng-container
+                        *ngFor="let media of post.mediaFiles | slice:0:4; let i = index; trackBy: trackByMedia">
+
+                        <div class="media-wrapper" *ngIf="media.contentType.includes('image')">
+                            <img [src]="baseURL + media.url" [alt]="media.fileName" class="media-item"
+                                (click)="openPost(post)" data-bs-toggle="modal" data-bs-target="#postModal">
+
+                            <div *ngIf="i === 3 && post.mediaFiles.length > 4" class="overlay" (click)="openPost(post)"
+                                data-bs-toggle="modal" data-bs-target="#postModal">
+                                +{{ post.mediaFiles.length - 4 }}
+                            </div>
+                        </div>
+
+
+                        <div class="media-wrapper" *ngIf="media.contentType.includes('video')">
+                            <video [src]="baseURL + media.url" class="media-item" controls
+                                (click)="openPost(post)" data-bs-toggle="modal" data-bs-target="#postModal">
+                            </video>
+                            <div *ngIf="i === 3 && post.mediaFiles.length > 4" class="overlay" (click)="openPost(post)"
+                                data-bs-toggle="modal" data-bs-target="#postModal">
+                                +{{ post.mediaFiles.length - 4 }}
+                            </div>
+                        </div>
+
+                    </ng-container>
+                </div>
+            </div>
+
+            <div class="card-footer bg-white d-flex justify-content-between text-muted">
+                <div>{{post.likesCount}}
+                    <button class=" p-0 m-0 border-0 bg-transparent text-muted" (click)="toggleLike(post)">
+
+                        <i class="fa-solid fa-heart" [ngClass]="post.isILiked ? 'text-danger' : 'text-secondary'"></i>
+                    </button>
+                </div>
+                <div>{{post.commentsCount}}
+                    <button (click)="openPost(post)" data-bs-toggle="modal" data-bs-target="#postModal"
+                        class="p-0 m-0 border-0 bg-transparent text-muted">
+
+                        <i class="fa-solid fa-comment-dots text-secondary"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="card-body py-0 d-flex align-items-center mb-3">
+                <div class="position-relative ">
+                    <img *ngIf="image" [src]="image" alt="Profile" class="rounded-circle object-fit-cover" width="40"
+                        height="40">
+
+                </div>
+                <input type="text" class="form-control rounded-pill mx-3" style="height: 40px;"
+                    placeholder="Add comment" id="CommentFromPost{{post.postId}}">
+                <div class="position-relative ">
+                    <button type="button" class="btn btn-default btn-circle shadow-0 border"
+                        (click)="addCommentFromOut(post.postId)"><i
+                            class="fa-solid fa-paper-plane rotate45"></i></button>
+
+                </div>
+            </div>
+            <div class="toast-message" *ngIf="toastMessage">
+                {{ toastMessage }}
+            </div>
+
+        </div>
+        <div class="d-flex justify-content-center ">
+
+            <button class="btn rounded-pill shadow-0 border shadow-1-soft mb-3" (click)="loadMorePosts()"
+                *ngIf="ForYouhasMorePosts">load more
+                posts</button>
+        </div>
+    </ng-container>
+</div> -->
+
+
+
+<!-- <ng-template #noFollowingposts>
+    <div class="card shadow-sm mb-4 text-center text-muted p-3" style="max-width: 600px; margin: auto;">
+        You are not following anyone yet.
+        <br>
+        Follow some people to get posts!
+    </div>
+</ng-template> -->
+<ng-template #noForYouPosts>
+    <div class="card shadow-sm mb-4 text-center text-muted p-3" style="max-width: 600px; margin: auto;">
+        No posts to show
+    </div>
+</ng-template>
+
+
+
+
+
+<!-- pop up dialog -->
+<div class="modal fade" id="postModal" tabindex="-1">
+    <div class="modal-dialog " style="min-width: 50%!important;">
+        <div class="modal-content">
+            <div class="modal-header justify-content-between">
+                <div></div>
+                <h5 class="modal-title text-center">{{ selectedPost?.authorName }}'s post</h5>
+                <button type="button" class="btn-close m-0 " data-bs-dismiss="modal"></button>
+            </div>
+
+
+
+
+
+            <div class="card">
+
+                <!-- Post Content -->
+                <div class="card-body">
+                    <p class="mb-2"><span
+                            class="text-secondary border-2 border-danger px-3 border-start border-secondary">{{selectedPost?.caption}}</span><br>
+                        {{selectedPost?.content}}</p>
+                    <div *ngIf="selectedPost?.mediaFiles.length>0" id="postCarousel" #postCarousel
+                        class="carousel slide" data-bs-ride="false" data-bs-interval="false">
+                        <div class="carousel-inner">
+                            <div *ngFor="let media of selectedPost?.mediaFiles; let i = index; trackBy: trackById"
+                                class="carousel-item" [ngClass]="{ active: i === 0 }">
+
+                                <img *ngIf="media.contentType.includes('image')" [src]="baseURL + media.url"
+                                    [alt]="media.fileName" class="d-block w-100 rounded">
+
+                                <video *ngIf="media.contentType.includes('video')" [src]="baseURL + media.url"
+                                    class="d-block w-100 rounded" controls>
+                                </video>
+                            </div>
+                        </div>
+
+                        <button class="carousel-control-prev " type="button" data-bs-target="#postCarousel"
+                            data-bs-slide="prev">
+                            <span>
+
+                                <i class="fa-solid fa-circle-left text-dark fs-3"></i>
+                            </span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#postCarousel"
+                            data-bs-slide="next">
+                            <i class="fa-solid fa-circle-right text-dark fs-3"></i>
+                        </button>
+                    </div>
+
+
+
+                    <!-- <span class="badge bg-light text-dark">Funny · Highlighted by Mohamed Ashour</span> -->
+                </div>
+
+
+                <!-- Post Footer -->
+                <div class="card-footer bg-white d-flex justify-content-between text-muted">
+                    <div>
+                        <!-- <span data-bs-toggle="modal" data-bs-target="#likesModal"> -->
+                        <span (click)="openLikesModal(selectedPost?.postId)">
+
+                            {{selectedPost?.likesCount}}
+                        </span>
+                        <button class=" p-0 m-0 border-0 bg-transparent text-muted" (click)="toggleLike(selectedPost)">
+
+                            <i class="fa-solid fa-heart"
+                                [ngClass]="selectedPost?.isILiked ? 'text-danger' : 'text-secondary'"></i>
+                        </button>
+                    </div>
+                    <div>{{selectedPost?.commentsCount}}
+                        <div class="p-0 m-0 border-0 bg-transparent text-muted d-inline">
+
+                            <i class="fa-solid fa-comment-dots text-secondary"></i>
+                        </div>
+                    </div>
+                    <!-- <div><i class="bi bi-arrow-repeat"></i> Repost</div>
+            <div><i class="bi bi-send"></i> Send</div> -->
+                </div>
+                <div class="card-body py-0 d-flex align-items-center mb-3">
+                    <div class="position-relative ">
+                        <img *ngIf="image" [src]="baseURL + selectedPost?.profilePictureUrl" alt="Profile"
+                            class="rounded-circle object-fit-cover" width="40" height="40">
+
+                    </div>
+                    <input type="text" class="form-control rounded-pill mx-3" style="height: 40px;"
+                        placeholder="Add comment" id="CommentFromInside{{selectedPost?.postId}}">
+                    <div class="position-relative ">
+                        <!-- <img *ngIf="image" [src]="image" alt="Profile" class="rounded-circle object-fit-cover" width="40"
+                    height="40"> -->
+                        <button type="button" class="btn btn-default btn-circle shadow-0 border"
+                            (click)="addCommentFromIn(selectedPost?.postId)"><i
+                                class="fa-solid fa-paper-plane rotate45"></i></button>
+
+                    </div>
+                    <!-- <button>send</button> -->
+                </div>
+
+
+                <hr class="mx-4" *ngIf="comments && comments.length">
+
+
+
+
+
+
+
+
+
+                <!-- Post Comments -->
+                <!-- <ng-container *ngIf="comments && comments.length > 0; else noComments">
+                
+                <div *ngFor="let comment of comments; trackBy: trackById" class="" id="CommentsContainer">
+
+
+
+
+
+                    <div class="card-body d-flex align-items-center">
+
+                        <img [src]="baseURL + comment.autherProfileImageUrl" [alt]="comment.authorName"
+                            class="rounded-circle me-3 object-fit-cover" width="50" height="50">
+                        <div>
+                            <div class="d-flex ">
+
+                                <h6 class="mb-0">{{comment.authorName}}</h6>
+                                <small class=" text-muted fw-lighter " style="font-size: 0.81em;"><span
+                                        class="mx-1">.</span>{{
+                                    getTimeAgo(comment.createdAt) }}</small>
+                            </div>
+                            <small class="">{{comment.content}} </small>
+                        </div>
+                    </div>
+
+
+                </div>
+
+
+            </ng-container> -->
+
+                <!-- Comments Section -->
+                <div class="comments-container" style="max-height: 400px; overflow-y: auto;"
+                    (scroll)="onScroll($event)">
+
+                    <div *ngFor="let comment of comments; trackBy: trackById"
+                        class="card-body d-flex align-items-center">
+                        <img [src]="baseURL + comment.autherProfileImageUrl" [alt]="comment.authorName"
+                            class="rounded-circle me-3 object-fit-cover" width="50" height="50">
+
+                        <div>
+                            <div class="d-flex">
+                                <h6 class="mb-0">{{ comment.authorName }}</h6>
+                                <small class="text-muted fw-lighter" style="font-size: 0.81em;">
+                                    <span class="mx-1">.</span>{{ getTimeAgo(comment.createdAt) }}
+                                </small>
+                            </div>
+                            <small>{{ comment.content }}</small>
+                        </div>
+                    </div>
+
+                    <div *ngIf="loadingComments" class="text-center py-2 text-muted">
+                        Loading more comments...
+                    </div>
+                </div>
+
+
+
+                <ng-template #noComments>
+                    <div class="text-center text-muted p-3">
+                        No Comments for this post!
+                    </div>
+                </ng-template>
+
+            </div>
+
+
+
+            <!-- <div class="modal-body">
+                {{ selectedPost?.content }}
+            </div> -->
+        </div>
+    </div>
+</div>
+
+<div class="modal fade likesModalBackground" id="likesModal" tabindex="-2">
+    <div class="modal-dialog " style="min-width: 40%!important;">
+        <div class="modal-content">
+            <div class="modal-header justify-content-between">
+                <div></div>
+                <h5 class="modal-title text-center">{{ selectedPost?.authorName }}'s post likes</h5>
+                <button type="button" class="btn-close m-0 " data-bs-dismiss="modal"></button>
+            </div>
+            <ng-container *ngIf="likes && likes.length > 0; else noLikes">
+                <div style="max-height: 400px; overflow-y: auto;" (scroll)="onLikeScroll($event)">
+
+
+                    <div *ngFor="let user of likes; trackBy: trackById" class="d-flex align-items-center  p-2 mb-3 ">
+                        <!-- <img [src]="baseURL + user.profilePictureUrl" [alt]="user.fullName"
+                            class="rounded-circle me-2 object-fit-cover preview-item" height="50px" width="50px">
+                        <button class="btn btn-sm btn-danger Like-btn">live</button> -->
+                        <div class="preview-wrapper">
+                            <img [src]="baseURL + user.profilePictureUrl" [alt]="user.fullName"
+                                class="rounded-circle object-fit-cover " height="50px" width="50px">
+
+                            <span class=" Like-btn"><i class="fa-solid fa-heart text-danger"></i></span>
+                        </div>
+
+                        <div class="flex-grow-1 ms-3">
+                            <h6 class="mb-0">{{ user.fullName }}</h6>
+                            <div class="text-muted" style="
+          display: -webkit-box;
+          -webkit-line-clamp: 1; 
+          -webkit-box-orient: vertical;
+          overflow: hidden;
+          max-width: 100%;
+        ">
+                                {{ user.bio }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </ng-container>
+            <ng-template #noLikes>
+                <div class="text-center text-muted p-3">
+                    No one like this post yet!
+                </div>
+            </ng-template>
+        </div>
+    </div>
+</div>

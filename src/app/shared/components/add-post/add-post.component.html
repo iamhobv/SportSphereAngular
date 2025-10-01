@@ -1,0 +1,100 @@
+<div class="card shadow-sm p-3" style="max-width: 600px; margin: auto;">
+    <!-- Top Row: Profile + Input -->
+    <div class="d-flex align-items-center mb-3">
+        <div class="position-relative me-2">
+            <img *ngIf="image" [src]="baseURL + ProfileImageURL" alt="Profile" class="rounded-circle object-fit-cover"
+                width="40" height="40">
+
+        </div>
+        <input type="text" class="form-control rounded-pill disabled" readonly style="height: 40px;"
+            placeholder="Start a post" data-bs-toggle="modal" data-bs-target="#addPostModal">
+    </div>
+
+    <!-- Bottom Row: Media Options -->
+    <div class="d-flex justify-content-around text-center">
+        <div class="text-success pointerClick" data-bs-toggle="modal" data-bs-target="#addPostModal">
+            <i class="fa-solid fa-video"></i><br>
+            <small>Video</small>
+        </div>
+        <div class="text-primary pointerClick" data-bs-toggle="modal" data-bs-target="#addPostModal">
+            <i class="fa-solid fa-image"></i><br>
+            <small>Photo</small>
+        </div>
+        <div class="text-warning pointerClick" data-bs-toggle="modal" data-bs-target="#addPostModal">
+            <i class="fa-solid fa-plus"></i><br>
+            <small>Post</small>
+        </div>
+    </div>
+</div>
+
+
+
+
+<div class="modal fade" id="addPostModal" tabindex="-1">
+    <div class="modal-dialog " style="min-width: 50%!important;">
+        <div class="modal-content">
+
+
+            <div class="card add-post">
+                <div class="modal-header justify-content-between">
+                    <div></div>
+                    <h5 class="modal-title text-center">Create post</h5>
+                    <button type="button" class="btn-close m-0 " data-bs-dismiss="modal"></button>
+                </div>
+                <div class=" d-flex align-items-center card-body">
+                    <img [src]="baseURL + ProfileImageURL" [alt]="currentUserName"
+                        class="rounded-circle me-3 object-fit-cover" width="50" height="50">
+
+                    <div>
+                        <div class="d-flex">
+                            <h4 class="mb-0">{{ currentUserName }}</h4>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body d-flex">
+                    <!-- Profile Picture -->
+
+
+                    <div class="flex-grow-1">
+                        <!-- Post Input -->
+                        <input class="form-control mb-2 border-0" placeholder="Caption" [(ngModel)]="caption">
+                        <textarea class="form-control mb-2 border-0" [(ngModel)]="content"
+                            placeholder="What's on your mind?" rows="10"></textarea>
+
+                        <!-- Media Preview -->
+                        <div class="media-preview d-flex flex-wrap" *ngIf="mediaPreviews.length > 0">
+                            <div class="preview-item me-2 mb-2" *ngFor="let media of mediaPreviews; let i = index">
+                                <img *ngIf="media.type.startsWith('image')" [src]="media.url" class="preview-img" />
+                                <video *ngIf="media.type.startsWith('video')" [src]="media.url" class="preview-img"
+                                    controls></video>
+                                <button type="button" class="btn btn-sm btn-danger remove-btn" (click)="removeMedia(i)">
+                                    ×
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Actions -->
+                        <div class="d-flex justify-content-between align-items-center mt-2">
+                            <div>
+                                <label for="fileUpload" class="btn btn-sm btn-outline-secondary me-2">
+                                    <i class="bi bi-image"></i> Photo/Video
+                                </label>
+                                <!-- <input type="file" id="fileUpload" (change)="onFileSelected($event)" multiple hidden /> -->
+                                <input type="file" id="fileUpload" (change)="onFileSelected($event)" multiple hidden />
+                            </div>
+                            <button class="btn btn-primary" [disabled]="!canPost()" (click)="submitPost()">
+                                Post
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="toast-message" *ngIf="toastMessage">
+                {{ toastMessage }}
+            </div>
+
+
+        </div>
+    </div>
+</div>

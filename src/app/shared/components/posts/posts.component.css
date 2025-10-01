@@ -1,0 +1,206 @@
+
+.btn-circle {
+  width: 40px;
+  height: 40px;
+  display: flex;              /* Use flexbox */
+  align-items: center;        /* Center vertically */
+  justify-content: center;    /* Center horizontally */
+  font-size: 16px;
+  border-radius: 50%;
+  padding: 0;                 /* Remove extra padding */
+}
+
+.btn-circle.btn-lg {
+  width: 50px;
+  height: 50px;
+  padding: 10px 16px;
+  font-size: 18px;
+  line-height: 1.33;
+  border-radius: 25px;
+}
+.btn-circle.btn-xl {
+  width: 70px;
+  height: 70px;
+  padding: 10px 16px;
+  font-size: 24px;
+  line-height: 1.33;
+  border-radius: 35px;
+}
+.rotate45 {
+
+    transform: rotate(45deg);
+    margin-left: -4px;
+}
+
+
+.media-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+  margin-top: 10px;
+}
+.top-button-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.media-wrapper {
+  position: relative;
+}
+
+.media-item {
+  width: 100%;
+  border-radius: 8px;
+  object-fit: cover;
+  max-height: 300px;
+}
+.button-item {
+  width: 100%;
+  border-radius: 8px;
+  object-fit: cover;
+  max-height: 300px;
+    border-radius: 0.5rem
+
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  font-size: 2rem;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+}
+
+.media-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.media-wrapper {
+  position: relative;
+}
+
+.media-item {
+  width: 100%;
+  height: 200px;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  font-size: 2rem;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.pointer{
+  cursor: pointer;
+}
+
+.post-page-btn-class-active{
+background-color: rgb(225, 225, 225);
+/* color: black; */
+}
+/* Full gallery modal */
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 12px;
+}
+
+.gallery-item {
+  width: 100%;
+  border-radius: 8px;
+  object-fit: cover;
+  max-height: 300px;
+}
+
+.carousel-inner img,
+.carousel-inner video {
+  max-height: 500px;
+  object-fit: contain;
+}
+
+.toast-message {
+  z-index: 99999999999999999;
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #333;
+  color: #fff;
+  padding: 12px 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+  animation: slideUp 0.3s ease, fadeOut 0.5s ease 2.5s;
+}
+
+@keyframes slideUp {
+  from { transform: translate(-50%, 100%); opacity: 0; }
+  to { transform: translate(-50%, 0); opacity: 1; }
+}
+
+@keyframes fadeOut {
+  to { opacity: 0; }
+}
+
+.modal.show {
+  z-index: 1055 !important; /* base modal */
+}
+
+#likesModal.show {
+  z-index: 1065 !important; /* higher than postModal */
+}
+
+.modal-backdrop.show {
+  z-index: 1050 !important;
+}
+
+#likesModal + .modal-backdrop.show {
+  z-index: 1060 !important; /* backdrop higher than postModal but under likesModal */
+}
+
+.likesModalBackground{
+  background-color: hsla(0, 0%, 0%, 0.5);
+}
+
+.preview-wrapper {
+  position: relative;      /* container is relative */
+  display: inline-block;   /* shrink-wrap to image size */
+}
+
+.Like-btn {
+ 
+    position: absolute;
+    bottom: -10px;
+    right: -8px;
+    /* border-radius: 50%; */
+    /* padding: 0px 6px; */
+    font-size: 20px;
+}
+
+.preview-item {
+  position: relative;
+}

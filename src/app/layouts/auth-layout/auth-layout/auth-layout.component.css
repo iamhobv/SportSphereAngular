@@ -1,0 +1,27 @@
+/* .auth-layout {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: linear-gradient(to bottom right, #0077b6, #90e0ef);
+}
+
+.auth-card {
+  width: 400px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+  padding: 2rem;
+}
+
+.auth-header {
+  text-align: center;
+  margin-bottom: 1.5rem;
+
+  .logo {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: #0077b6;
+  }
+} */

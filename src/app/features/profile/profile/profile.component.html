@@ -1,0 +1,49 @@
+<div class="container mt-5">
+    <div class="row g-4">
+
+        <div class="col-md-3">
+
+            <app-first-column-in-home-profile sport="{{ProfileData.sport}}" userName="{{ProfileData.fullName}}"
+                bio="{{ProfileData.bio}}" resident="{{ProfileData.city}},{{ProfileData.country}}"
+                role="{{ProfileData.role}}" userId="{{ProfileData.userId}}"
+                image="{{ProfileData.profileImageURL}}"></app-first-column-in-home-profile>
+        </div>
+        <!-- Column 2 -->
+        <div class="col-md-6">
+            <div class="">
+                <div class="card-body">
+                    <div class=" card mb-3 shadow-sm" style="max-width: 600px; margin: auto;">
+                        <app-profile-card-profile></app-profile-card-profile>
+                    </div>
+                    <app-posts image="{{ProfileData.profileImageURL}}" [currentUserProfileId]="ProfileData.profileID!"
+                        [currentUserName]="ProfileData.fullName"
+                        [ProfileImageURL]="ProfileData.profileImageURL"></app-posts>
+                </div>
+            </div>
+        </div>
+
+        <!-- Column 3 -->
+        <div class="col-md-3">
+            <div class="card shadow-0">
+                <div class="card px-0 pt-0 shadow-sm">
+                    <app-search></app-search>
+
+
+                </div>
+                <div class="card-body px-0">
+                    <app-add-post image="{{ProfileData.profileImageURL}}"
+                        [currentUserProfileId]="ProfileData.profileID!" [currentUserName]="ProfileData.fullName"
+                        [ProfileImageURL]="ProfileData.profileImageURL"></app-add-post>
+                </div>
+                <div class="card-body px-0 pt-0">
+
+
+                    <app-poeple-you-may-know></app-poeple-you-may-know>
+                </div>
+
+
+            </div>
+
+        </div>
+    </div>
+</div>
