@@ -34,7 +34,7 @@ export class FirstColumnInHomeProfileComponent implements OnInit {
   logout() {
     this.authService.logoutFront();
     if (this.authService.getToken() == null) {
-      this.router.navigate(['/login']);
+      this.router.navigate(['/auth/login']);
 
     }
   }
