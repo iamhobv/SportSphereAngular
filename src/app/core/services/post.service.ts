@@ -18,7 +18,7 @@ export class PostService {
 
 
   writePost(formData: FormData): Observable<any> {
-    return this.http.post<any>('https://localhost:7212/api/Post/write-post', formData);
+    return this.http.post<any>(`${this.apiUrl}/write-post`, formData);
   }
 
   getUserPosts(userId: string, page: number, pageSize: number): Observable<any> {
